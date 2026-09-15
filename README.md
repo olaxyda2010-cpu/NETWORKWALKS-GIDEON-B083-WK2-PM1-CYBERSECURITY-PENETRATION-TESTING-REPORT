@@ -82,9 +82,108 @@ Next, I ran **Wafw00f** to identify whether a Web Application Firewall (WAF) was
 
 
 ###
-#DNSRECON
+# DNSRECON
 Finally, I used **DNSRecon** to gather available DNS information associated with the domain. The enumeration revealed details related to **name servers, mail servers, SPF/TXT records, service records, and DNS software**.
 <img width="1366" height="414" alt="image" src="https://github.com/user-attachments/assets/d4bb62c1-4821-4b40-b956-26b9a65252d1" />
 
 
 These findings provided additional visibility into the target's **web-server configuration, security controls, and DNS infrastructure**, contributing to the overall reconnaissance profile.
+
+###
+## 3.2 Network Scanning with Zenmap
+
+The second practical activity focused on **network discovery and host identification using Zenmap** within my local network. The objective was to determine the local IP address and subnet, identify active devices, obtain their IP and MAC addresses, and visualize the discovered hosts using Zenmap's network topology feature.
+
+
+
+I began by running the `ipconfig` command on Windows cmd to obtain the computer's local IP address and determine the applicable LAN subnet.
+
+<img width="971" height="500" alt="image" src="https://github.com/user-attachments/assets/fd6aecb4-dd65-480b-975d-9e388532452e" />
+
+
+
+
+ I then configured Zenmap with the identified subnet which is **192.168.56.1** and performed a **Ping Scan** to detect devices that were actively responding on the network. The command nmap -sn -PR 192.168.1.0/24
+
+The practical exercise identified the following live hosts:
+
+- `192.168.1.1`
+- `192.168.1.193`
+- `192.168.1.56`
+-
+
+The scan also returned corresponding **MAC address information** for the discovered devices.
+<img width="1356" height="498" alt="image" src="https://github.com/user-attachments/assets/313a9b4c-f327-4eb7-8c41-9fac69d01213" />
+
+
+After completing the host discovery scan, I accessed the **Topology** tab in Zenmap to visualize the network structure. I enabled the topology legend and exported the resulting network map as a **PDF**, as required by the practical exercise.
+<img width="1353" height="588" alt="image" src="https://github.com/user-attachments/assets/d3f91b2d-f5ad-4260-b6fd-0473bec554d6" />
+
+
+###
+
+
+
+## 4. Risk Analysis / Impact
+
+The reconnaissance and network-scanning exercises produced several findings that may have security implications. The observations below summarize the identified exposures and their potential impact.
+
+| # | Risk / Finding | Evidence / Observation | Potential Impact | Risk Level |
+|---|---|---|---|---|
+| 1 | **Web technology details exposed** | WhatWeb detected **WordPress** and **WP Download Manager** on the website. | Technology and version details could help an attacker identify components that may require additional security assessment. | 🟠 **Medium** |
+| 2 | **Web server IP address exposed** | Nslookup mapped the domain to **192.232.216.135**. | The information provides visibility into the network location associated with the web service. | 🟡 **Low** |
+| 3 | **HTTP response information disclosed** | cURL returned HTTP headers and revealed the `/wp-json/` endpoint. | The exposed information may support application fingerprinting and additional reconnaissance. | 🟡 **Low** |
+| 4 | **WAF technology detected** | Wafw00f identified **ModSecurity (SpiderLabs)** as the deployed WAF. | Identifying the security technology provides information about the web application's defensive infrastructure. | 🟡 **Low** |
+| 5 | **DNS infrastructure exposed** | DNSRecon returned DNS, mail-server, and service-related records. | The information could be combined with other findings to develop a broader picture of the target infrastructure. | 🟠 **Medium** |
+| 6 | **Multiple active hosts discovered** | Zenmap detected multiple responsive devices on the local network. | Unidentified or unauthorized devices could increase the potential attack surface of the local network. | 🟠 **Medium** |
+
+### Risk Level Classification
+
+- 🟡 **Low:** Limited exposure with relatively low immediate security impact.
+- 🟠 **Medium:** Information that could contribute to further reconnaissance or increase exposure.
+- 🔴 **High:** Findings that could present a significant security risk and require prompt attention.
+
+###
+
+## 5. Security Recommendations
+
+- Keep WordPress, plugins, themes, and other web technologies regularly updated.
+- Minimize unnecessary technical information exposed through HTTP headers and public endpoints.
+- Review and secure DNS records and remove outdated or unnecessary entries.
+- Maintain and regularly update WAF security rules and configurations.
+- Monitor the local network for unknown or unauthorized devices.
+- Conduct periodic vulnerability assessments and network security scans.
+- Apply strong access controls to administrative and sensitive services.
+- Enable security logging and monitor for suspicious network activity.
+- Protect sensitive configuration and system information from public exposure.
+- Document findings and verify that identified security issues are properly addressed.
+
+
+## 6. Conclusion
+
+
+This practical exercise provided valuable hands-on experience in the **reconnaissance, footprinting, network discovery, and initial security assessment phases of penetration testing**. The activities demonstrated how security professionals can systematically gather information about a target and use the collected data to develop an initial understanding of its digital infrastructure.
+
+During the **footprinting and reconnaissance phase**, I used several Kali Linux tools, including **WHOIS, WhatWeb, Nslookup, cURL, Wafw00f, and DNSRecon**. Each tool provided a different perspective of the target environment. The assessment revealed information relating to domain registration, DNS infrastructure, the associated IP address, web technologies, HTTP response headers, publicly accessible endpoints, and the presence of a Web Application Firewall. Combining these results demonstrated how individual pieces of publicly available information can contribute to a broader understanding of a target's infrastructure.
+
+The **network-scanning exercise** provided practical experience using **Zenmap** to identify active hosts within an authorized local network. By first determining the local IP address and subnet using Windows networking commands, I was able to configure Zenmap and perform host discovery. The scan demonstrated how network-scanning tools can identify responsive devices and provide information such as IP and MAC addresses. The Zenmap topology feature also provided a visual representation of the discovered network environment.
+
+The exercises highlighted the importance of conducting reconnaissance and scanning in a **structured, controlled, and authorized manner**. Information gathered during these stages can help security professionals understand the attack surface, identify areas requiring further investigation, and prioritize appropriate security controls. At the same time, the findings demonstrate why organizations should minimize unnecessary information exposure and maintain visibility over devices and services operating within their networks.
+
+From a learning perspective, this practical strengthened my ability to work with **Kali Linux, Windows networking tools, Zenmap, Nmap-based scanning, DNS enumeration, web technology fingerprinting, and basic security analysis**. It also improved my understanding of how reconnaissance findings can be documented, interpreted, and translated into potential security risks and recommendations.
+
+Overall, the project provided a practical foundation for progressing into more advanced stages of security assessment, including **service enumeration, vulnerability identification, exploitation testing, and security validation**. All activities documented in this report were conducted within controlled environments and against systems for which appropriate authorization was available.
+
+
+###
+**👤 Author**
+
+**Oyewale Olaoluwa Gideon**  
+Cybersecurity Intern | B083
+LinkedIn: www.linkedin.com/in/oyewale-olaouwa-60b252bb
+
+---
+
+**📌 Project Information**
+
+**Program Name:** Cybersecurity Internship Program at Networkwalks | **Week:** 02 | **Project:** Footprinting & Network Scanning Phases  | **Repository:** GitHub
